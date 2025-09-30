@@ -14,7 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth",authRoutes);
 app.use("/api/trip", tripRoutes);
 //Error Handle
-app.use(errorHandler);
+// app.use(errorHandler);
 
 
 export default app;
+
