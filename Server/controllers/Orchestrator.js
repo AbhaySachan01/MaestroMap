@@ -1,3 +1,4 @@
+import eventAgent from "../agents/Events.js";
 import weatherAgent from "../agents/Weather.js";
 
 export const orchestrateTrip = async (req, res) => {
@@ -5,12 +6,13 @@ export const orchestrateTrip = async (req, res) => {
     const { destination, startDate,endDate, budgetPreference } = req.body;
 
     const weather = await weatherAgent(destination, startDate,endDate);
-
+    const event=await eventAgent(destination,startDate,endDate);
     const tripPlan = {
       destination,
       startDate,
       endDate,
       weather,
+      event
     };
 
     res.json({ success: true, tripPlan });
