@@ -28,11 +28,17 @@ import LandingPage from './components/LandingPage';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
 import VerifyEmail from './components/verifyEmail';
+
+import RoutePlanner from './components/RoutePlanner';
+
+
+
 import MapComponent from './components/MapComponent'
 import Dashboard from './components/Dashboard';
 
 function AppRoutes() {
   const { user, logout } = useAuth();
+
 
   return (
     <Routes>
@@ -41,12 +47,11 @@ function AppRoutes() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/find" element={<RoutePlanner />} />
       <Route path="/map" element={<MapComponent />} />
 
-      <Route 
-        path="/dashboard" 
-        element={user ? <Dashboard user={user} onLogout={logout} /> : <Signin />} 
-      />
+      <Route path="/dashboard" 
+        element={user ? <Dashboard user={user} onLogout={logout} /> : <Signin />} />
     </Routes>
   );
 }
