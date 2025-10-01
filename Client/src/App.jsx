@@ -27,6 +27,7 @@ import { AuthProvider, useAuth } from "./context/authContext";
 import LandingPage from './components/LandingPage';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
+import VerifyEmail from './components/verifyEmail';
 import MapComponent from './components/MapComponent'
 import Dashboard from './components/Dashboard';
 
@@ -38,6 +39,8 @@ function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/signin" element={<Signin />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/map" element={<MapComponent />} />
 
       <Route 
