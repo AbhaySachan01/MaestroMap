@@ -140,8 +140,7 @@ import axios from "axios";
 const AMADEUS_AUTH_URL = "https://test.api.amadeus.com/v1/security/oauth2/token";
 const AMADEUS_BASE_URL = "https://test.api.amadeus.com/v1";
 const CLIENT_ID = "CWWZGQRaM18Ky5KDATo6a8GN4GI5Xmke";
-const CLIENT_SECRET = "ArxE4SrrG5KpWpdV";
-
+const CLIENT_SECRET ="ArxE4SrrG5KpWpdV";
 let accessToken = null;
 let tokenExpiry = 0;
 
