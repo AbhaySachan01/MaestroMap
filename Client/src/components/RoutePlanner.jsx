@@ -61,18 +61,18 @@ export default function RoutePlanner() {
 
     if (mode === "PERSONAL") {
       if (subMode === "4W") {
-        const mileage = 12; // kmpl
+        const mileage = 17; // kmpl
         const fuelCostPerLitre = 105; // ₹ per liter
         tollCost = Math.max(50, Math.floor(distanceKm / 60) * 120); // ₹120 every 60km
         baseCost = (distanceKm / mileage) * fuelCostPerLitre + tollCost;
       } else if (subMode === "BIKE") {
-        const mileage = 45; // kmpl
+        const mileage = 40; // kmpl
         const fuelCostPerLitre = 105; // ₹ per liter
         baseCost = (distanceKm / mileage) * fuelCostPerLitre;
       }
     } else if (mode === "TRANSIT") {
       baseFare = subMode === "BUS" ? 20 : subMode === "SLEEPER" ? 80 : 150;
-      costPerKm = subMode === "BUS" ? 2.5 : subMode === "SLEEPER" ? 0.4 : 2.1;
+      costPerKm = subMode === "BUS" ? 2.5 : subMode === "SLEEPER" ? 0.45 : 2.2;
       baseCost = baseFare + (distanceKm * costPerKm);
     } else if (mode === "CAR_BOOKING") {
       baseFare = 80;
