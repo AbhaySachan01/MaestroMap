@@ -466,3 +466,366 @@ const Dashboard = ({ user, onLogout }) => {
 };
 
 export default Dashboard;
+// import { useState, useEffect } from 'react';
+// import { Button } from './ui/button';
+// import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+// import { Input } from './ui/input';
+// import { Label } from './ui/label';
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+// import { Badge } from './ui/badge';
+// // REMOVED: Calendar and Popover components are no longer needed
+// // import { Calendar } from './ui/calendar';
+// // import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+// import { toast } from 'sonner';
+// import { format } from 'date-fns';
+// import { Link, useNavigate } from 'react-router-dom';
+
+// const MOCK_TRIPS_DATA = [
+//   {
+//     id: 'trip_1',
+//     status: 'completed',
+//     request: {
+//       destination: 'Paris, France',
+//       start_date: '2025-08-15',
+//       end_date: '2025-08-22',
+//       travelers_count: 2,
+//       budget_range: 'high',
+//       interests: ['culture', 'food', 'history'],
+//     },
+//   },
+//   {
+//     id: 'trip_2',
+//     status: 'processing',
+//     request: {
+//       destination: 'Kyoto, Japan',
+//       start_date: '2025-10-05',
+//       end_date: '2025-10-12',
+//       travelers_count: 1,
+//       budget_range: 'medium',
+//       interests: ['nature', 'food', 'culture'],
+//     },
+//   },
+// ];
+
+// const Dashboard = ({ user, onLogout }) => {
+//   const navigate = useNavigate();
+//   const [trips, setTrips] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [planningTrip, setPlanningTrip] = useState(false);
+//   const [showPlanForm, setShowPlanForm] = useState(false);
+
+//   const [destination, setDestination] = useState('');
+//   // State will now store dates as "YYYY-MM-DD" strings
+//   const [startDate, setStartDate] = useState(null);
+//   const [endDate, setEndDate] = useState(null);
+//   const [budget, setBudget] = useState('medium');
+//   const [travelers, setTravelers] = useState(1);
+//   const [interests, setInterests] = useState([]);
+
+//   const availableInterests = ['culture', 'adventure', 'food', 'nightlife', 'nature', 'history', 'shopping', 'sports'];
+
+//   useEffect(() => {
+//     fetchTrips();
+//   }, []);
+
+//   useEffect(() => {
+//     console.log("Logged in user:", user);
+//   }, [user]);
+
+//   const fetchTrips = () => {
+//     console.log("Fetching mock trips...");
+//     setLoading(true);
+//     setTimeout(() => {
+//       setTrips(MOCK_TRIPS_DATA);
+//       setLoading(false);
+//       toast("Dashboard Loaded", {
+//         description: "Your adventures are ready to view.",
+//       });
+//     }, 1500);
+//   };
+
+//   const handlePlanTrip = () => {
+//     if (!destination || !startDate || !endDate) {
+//       toast.error("Missing Information", {
+//         description: "Please fill in all required fields.",
+//       });
+//       return;
+//     }
+//     if (startDate >= endDate) {
+//       toast.error("Invalid Dates", {
+//         description: "End date must be after start date.",
+//       });
+//       return;
+//     }
+//     setPlanningTrip(true);
+//     setTimeout(() => {
+//       const newTripId = `trip_${Date.now()}`;
+//       const newTrip = {
+//         id: newTripId,
+//         status: 'completed',
+//         request: {
+//           destination: destination.trim(),
+//           // --- CHANGE: No need to format, dates are already strings ---
+//           start_date: startDate,
+//           end_date: endDate,
+//           budget_range: budget,
+//           travelers_count: travelers,
+//           interests: interests
+//         }
+//       };
+//       setTrips(prevTrips => [newTrip, ...prevTrips]);
+//       toast.success("Trip Planned! 🎪", {
+//         description: `Your ${destination} adventure is ready! The agents have worked their magic.`,
+//       });
+//       navigate(`/trip/${newTripId}`);
+//       setPlanningTrip(false);
+//       setShowPlanForm(false);
+//     }, 2000);
+//   };
+
+//   const toggleInterest = (interest) => {
+//     setInterests(prev =>
+//       prev.includes(interest)
+//         ? prev.filter(i => i !== interest)
+//         : [...prev, interest]
+//     );
+//   };
+
+//   const getStatusColor = (status) => {
+//     switch (status) {
+//       case 'completed': return 'bg-green-500';
+//       case 'processing': return 'bg-yellow-500';
+//       case 'error': return 'bg-red-500';
+//       default: return 'bg-gray-500';
+//     }
+//   };
+
+//   if (loading) {
+//     return (
+//       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 flex items-center justify-center">
+//         <div className="text-center">
+//           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+//           <p className="text-orange-800 font-medium">Loading your dashboard...</p>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50">
+//       {/* Header */}
+//       <header className="bg-white/80 backdrop-blur-sm border-b border-orange-100 sticky top-0 z-50">
+//           {/* Header content remains the same */}
+//       </header>
+
+//       <div className="max-w-7xl mx-auto px-6 py-8">
+//         {/* Welcome and Buttons remain the same */}
+
+//         {/* Trip Planning Form */}
+//         {showPlanForm && (
+//           <Card className="mb-8 bg-white/90 backdrop-blur-sm" data-testid="trip-planning-form">
+//             <CardHeader>
+//               <CardTitle className="text-2xl text-gray-900 flex items-center">
+//                 <i className="fas fa-map-marked-alt text-orange-500 mr-3"></i>
+//                 Plan Your Grand Tour
+//               </CardTitle>
+//             </CardHeader>
+//             <CardContent className="space-y-6">
+//               {/* Destination */}
+//               <div>
+//                 <Label htmlFor="destination" className="text-base font-medium text-gray-700">Destination</Label>
+//                 <Input
+//                   id="destination"
+//                   placeholder="Where shall we take the circus?"
+//                   value={destination}
+//                   onChange={(e) => setDestination(e.target.value)}
+//                   className="mt-2"
+//                   data-testid="destination-input"
+//                 />
+//               </div>
+
+//               {/* --- 📅 DATES SECTION UPDATED 📅 --- */}
+//               <div className="grid md:grid-cols-2 gap-4">
+//                 <div>
+//                   <Label className="text-base font-medium text-gray-700">Start Date</Label>
+//                   <Input
+//                     type="date"
+//                     value={startDate || ""}
+//                     onChange={(e) => {
+//                       const newStartDate = e.target.value;
+//                       if (endDate && newStartDate > endDate) {
+//                         setEndDate(null);
+//                       }
+//                       setStartDate(newStartDate);
+//                     }}
+//                     className="mt-2"
+//                     data-testid="start-date-input"
+//                   />
+//                 </div>
+//                 <div>
+//                   <Label className="text-base font-medium text-gray-700">End Date</Label>
+//                   <Input
+//                     type="date"
+//                     value={endDate || ""}
+//                     min={startDate}
+//                     disabled={!startDate}
+//                     onChange={(e) => setEndDate(e.target.value)}
+//                     className="mt-2 disabled:bg-gray-100/70 disabled:cursor-not-allowed"
+//                     data-testid="end-date-input"
+//                   />
+//                 </div>
+//               </div>
+//               {/* --- END OF DATES SECTION --- */}
+//                {/* Budget and Travelers */}
+//                <div className="grid md:grid-cols-2 gap-4">
+//                  <div>
+//                    <Label className="text-base font-medium text-gray-700">Budget Range</Label>
+//                    <Select value={budget} onValueChange={setBudget}>
+//                      <SelectTrigger className="mt-2" data-testid="budget-select">
+//                        <SelectValue />
+//                      </SelectTrigger>
+//                      <SelectContent>
+//                        <SelectItem value="low">Low Budget ($50-100/day)</SelectItem>
+//                        <SelectItem value="medium">Medium Budget ($100-200/day)</SelectItem>
+//                        <SelectItem value="high">High Budget ($200+/day)</SelectItem>
+//                      </SelectContent>
+//                    </Select>
+//                  </div>
+//                  <div>
+//                    <Label className="text-base font-medium text-gray-700">Number of Travelers</Label>
+//                    <Input
+//                     type="number"
+//                     min="1"
+//                     max="20"
+//                     value={travelers}
+//                     onChange={(e) => setTravelers(parseInt(e.target.value) || 1)}
+//                     className="mt-2"
+//                     data-testid="travelers-input"
+//                   />
+//                 </div>
+//               </div>
+
+//               {/* Interests */}
+//               <div>
+//                 <Label className="text-base font-medium text-gray-700 mb-3 block">Interests</Label>
+//                 <div className="flex flex-wrap gap-2" data-testid="interests-section">
+//                   {availableInterests.map((interest) => (
+//                     <Badge
+//                       key={interest}
+//                       variant={interests.includes(interest) ? 'default' : 'outline'}
+//                       className={`cursor-pointer transition-colors ${
+//                         interests.includes(interest) 
+//                           ? 'bg-orange-500 text-white hover:bg-orange-600' 
+//                           : 'hover:bg-orange-50 hover:text-orange-600'
+//                       }`}
+//                       onClick={() => toggleInterest(interest)}
+//                       data-testid={`interest-${interest}`}
+//                     >
+//                       {interest}
+//                     </Badge>
+//                   ))}
+//                 </div>
+//               </div>
+
+//               {/* Submit Button */}
+//               <div className="pt-4">
+//                 <Button 
+//                   onClick={handlePlanTrip}
+//                   disabled={planningTrip}
+//                   className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 text-lg"
+//                   data-testid="orchestrate-trip-btn"
+//                 >
+//                   {planningTrip ? (
+//                     <>
+//                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+//                       Agents are collaborating...
+//                     </>
+//                   ) : (
+//                     <>
+//                       <i className="fas fa-magic mr-2"></i>
+//                       Orchestrate the Perfect Tour
+//                     </>
+//                   )}
+//                 </Button>
+//               </div>
+//             </CardContent>
+//           </Card>
+//         )}
+
+//         {/* Previous Trips */}
+//         <div>
+//           <h3 className="text-2xl font-bold text-gray-900 mb-6">Your Grand Tours</h3>
+//           {trips.length === 0 ? (
+//             <Card className="bg-white/70 backdrop-blur-sm" data-testid="no-trips-message">
+//               <CardContent className="text-center py-12">
+//                 <i className="fas fa-compass text-6xl text-gray-300 mb-4"></i>
+//                 <h4 className="text-xl font-semibold text-gray-600 mb-2">No adventures yet!</h4>
+//                 <p className="text-gray-500">Create your first trip plan and let our agents work their magic.</p>
+//               </CardContent>
+//             </Card>
+//           ) : (
+//             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="trips-grid">
+//               {trips.map((trip) => (
+//                 <Card 
+//                   key={trip.id} 
+//                   className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300 cursor-pointer hover:shadow-lg hover:scale-105"
+//                   onClick={() => navigate(`/trip/${trip.id}`)}
+//                   data-testid={`trip-card-${trip.id}`}
+//                 >
+//                   <CardHeader>
+//                     <div className="flex items-center justify-between">
+//                       <CardTitle className="text-lg font-bold text-gray-900">
+//                         <i className="fas fa-map-marker-alt text-orange-500 mr-2"></i>
+//                         {trip.request.destination}
+//                       </CardTitle>
+//                       <div className={`w-3 h-3 rounded-full ${getStatusColor(trip.status)}`} data-testid={`trip-status-${trip.id}`}></div>
+//                     </div>
+//                   </CardHeader>
+//                   <CardContent>
+//                     <div className="space-y-2 text-sm text-gray-600">
+//                       <p>
+//                         <i className="fas fa-calendar mr-2"></i>
+//                         {trip.request.start_date} to {trip.request.end_date}
+//                       </p>
+//                       <p>
+//                         <i className="fas fa-users mr-2"></i>
+//                         {trip.request.travelers_count} traveler{trip.request.travelers_count > 1 ? 's' : ''}
+//                       </p>
+//                       <p>
+//                         <i className="fas fa-dollar-sign mr-2"></i>
+//                         {trip.request.budget_range} budget
+//                       </p>
+//                       {trip.request.interests.length > 0 && (
+//                         <div className="flex flex-wrap gap-1 mt-3">
+//                           {trip.request.interests.slice(0, 3).map((interest) => (
+//                             <Badge key={interest} variant="secondary" className="text-xs">
+//                               {interest}
+//                             </Badge>
+//                           ))}
+//                           {trip.request.interests.length > 3 && (
+//                             <Badge variant="secondary" className="text-xs">
+//                               +{trip.request.interests.length - 3}
+//                             </Badge>
+//                           )}
+//                         </div>
+//                       )}
+//                     </div>
+//                     <div className="mt-4">
+//                       <Badge 
+//                         variant={trip.status === 'completed' ? 'default' : trip.status === 'processing' ? 'secondary' : 'destructive'}
+//                         className="text-xs"
+//                       >
+//                         {trip.status}
+//                       </Badge>
+//                     </div>
+//                   </CardContent>
+//                 </Card>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+// export default Dashboard;

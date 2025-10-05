@@ -1,26 +1,3 @@
-// import React from 'react';
-// import { Route, Routes } from 'react-router-dom';
-
-// // Import your page components
-// import LandingPage from './components/LandingPage';
-// import Signup from './components/Signup';
-// import Signin from './components/Signin';
-// import MapComponent from './components/MapComponent'
-// import Dashboard from './components/Dashboard';
-
-// function App() {
-//   return (
-//     <Routes>
-//       <Route path="/" element={<LandingPage />} />
-//       <Route path="/dashboard" element={<Dashboard />} />
-//       <Route path="/signup" element={<Signup />} />
-//       <Route path="/signin" element={<Signin />} />
-//       <Route path="/map" element={<MapComponent />} />
-//     </Routes>
-//   );
-// }
-
-// export default App;
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/authContext";
@@ -42,31 +19,37 @@ import PlacesHotelFood from "./temporary/PlacesHotelFood";
 import ItineraryGenerator from "./temporary/ItinerarayGenerator";
 import MyTrips from "./temporary/MyTrips";
 import TripDetails from "./temporary/TripDetails";
+import AppLayout from './pages/AppLayout';
 function AppRoutes() {
   const { user, logout } = useAuth();
 
 
   return (
-    <Routes>
+     <Routes>
+      {/*  Routes on which hoe not required */}
       <Route path="/" element={<LandingPage />} />
-      <Route path="/placeshotels" element={<PlacesHotelFood />} />
-      <Route path="/generate" element={<ItineraryGenerator />} />
-      <Route path="/my-trips" element={<MyTrips />} />
-      <Route path="/my-trips/:tripId" element={<TripDetails />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/signin" element={<Signin />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
-      <Route path="/findroutes" element={<RoutePlanner />} />
-      <Route path="/openplaces" element={<OpenTripPlaces />} />
-      <Route path="/googleplaces" element={<GooglePlaces />} />
-      <Route path="/hotels" element={<HotelsFormPage />} />
-      <Route path="/tripdash" element={<TripDashboard />} />
 
-      <Route path="/weatherDetails" element={<WeatherPage/>}/>
-      <Route path="eventDetails" element={<EventPage/>}/>
-      <Route path="/dashboard" 
-        element={user ? <Dashboard user={user} onLogout={logout} /> : <Signin />} />
+      {/* Routes with home button */}
+      <Route element={<AppLayout />}>
+        <Route path="/placeshotels" element={<PlacesHotelFood />} />
+        <Route path="/generate" element={<ItineraryGenerator />} />
+        <Route path="/my-trips" element={<MyTrips />} />
+        <Route path="/my-trips/:tripId" element={<TripDetails />} />
+        <Route path="/findroutes" element={<RoutePlanner />} />
+        <Route path="/openplaces" element={<OpenTripPlaces />} />
+        <Route path="/googleplaces" element={<GooglePlaces />} />
+        <Route path="/hotels" element={<HotelsFormPage />} />
+        <Route path="/tripdash" element={<TripDashboard />} />
+        <Route path="/weatherDetails" element={<WeatherPage />} />
+        <Route path="/eventDetails" element={<EventPage />} />
+        <Route 
+          path="/dashboard" 
+          element={user ? <Dashboard user={user} onLogout={logout} /> : <Signin />} 
+        />
+      </Route>
     </Routes>
   );
 }
