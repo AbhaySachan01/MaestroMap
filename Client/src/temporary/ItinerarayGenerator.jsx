@@ -1,271 +1,9 @@
-// import { useState, useRef } from "react";
-// import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
-// import { useAuth } from "../context/authContext"; // Make sure the path is correct
-// import { Link } from "react-router-dom";
-// import { Button } from '../components/ui/button';
-// export default function ItineraryGenerator() {
-//   const [days, setDays] = useState(3);
-//   const [itinerary, setItinerary] = useState(null);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [isSaving, setIsSaving] = useState(false);
-//   const destAutoRef = useRef(null);
-//   const { user } = useAuth(); // Use your existing AuthContext
-
-//   const { isLoaded } = useJsApiLoader({
-//     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-//     libraries: ["places"],
-//   });
-
-//   const handleGenerateItinerary = async () => {
-//     const place = destAutoRef.current?.getPlace();
-//     if (!place?.geometry) {
-//       alert("Please select a valid destination from the suggestions.");
-//       return;
-//     }
-
-//     setIsLoading(true);
-//     setItinerary(null);
-
-//     const destination = {
-//       name: place.name,
-//       lat: place.geometry.location.lat(),
-//       lng: place.geometry.location.lng(),
-//     };
-
-//     try {
-//       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/itinerary/generate`, {
-//         method: "POST",
-//         headers: {
-//            "Content-Type": "application/json",
-//            // Send the user's token for backend authorization
-//            "Authorization": `Bearer ${user.token}`
-//         },
-//         body: JSON.stringify({ destination, days }),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error("Failed to generate itinerary.");
-//       }
-
-//       const data = await response.json();
-//       setItinerary(data.itinerary);
-//     } catch (error) {
-//       console.error("Itinerary generation error:", error);
-//       alert("There was an error generating the itinerary. Please try again.");
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   const handleSaveItinerary = async () => {
-//     if (!itinerary || !user) return;
-
-//     const place = destAutoRef.current?.getPlace();
-//     if (!place) return;
-
-
-//     setIsSaving(true);
-//     try {
-//         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/itinerary/save`, {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 "Authorization": `Bearer ${user.token}` // Crucial for identifying the user on the backend
-//             },
-//             body: JSON.stringify({
-//                 destinationName: place.name,
-//                 itineraryData: itinerary,
-//                 // userId is not needed in the body if the backend can identify the user from the token
-//             }),
-//         });
-
-//         if (!response.ok) {
-//             throw new Error("Failed to save the itinerary.");
-//         }
-
-//         alert("Itinerary saved to 'My Trips'!");
-//     } catch (error) {
-//         console.error("Save itinerary error:", error);
-//         alert("There was an error saving your itinerary.");
-//     } finally {
-//         setIsSaving(false);
-//     }
-//   };
-
-//   if (!isLoaded) return <div className="text-center p-10">Loading Google Maps...</div>;
-
-//   // If the user is not logged in, render a message
-//   if (!user) {
-//     return (
-//       <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
-//         <div className="text-center bg-white p-10 rounded-lg shadow-lg">
-//           <h1 className="text-3xl font-bold text-gray-800 mb-4">Access Denied</h1>
-//           <p className="text-gray-600">Please log in to use the Itinerary Generator and save your trips.</p>
-//           {/* You might want to add a <Link to="/login">Login</Link> component here */}
-//           <Link to="/signin">
-//         <Button 
-//           className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 hover:shadow-lg"
-//           data-testid="header-login-btn"
-//         >
-//           <i className="fab fa-google mr-2"></i>
-//           Sign In
-//         </Button>
-//       </Link>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   // If the user is logged in, render the generator
-//   return (
-//     <div className="p-6 bg-gray-100 min-h-screen font-sans">
-//       <div className="max-w-4xl mx-auto">
-//         <div className="bg-white p-8 rounded-lg shadow-lg mb-6">
-//           <h1 className="text-3xl font-bold text-gray-800 mb-4">AI-Powered Itinerary Planner</h1>
-//           <p className="text-gray-600 mb-6">Enter your destination and trip duration, and let our AI create a personalized travel plan for you.</p>
-//           {/* ... (rest of the form is the same as your original code) ... */}
-          
-//           <div className="grid md:grid-cols-3 gap-4 items-end">
-//             <div className="md:col-span-2">
-//               <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
-//               <Autocomplete onLoad={(auto) => (destAutoRef.current = auto)}>
-//                 <input
-//                   type="text"
-//                   placeholder="e.g., Paris, France"
-//                   className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                 />
-//               </Autocomplete>
-//             </div>
-//             <div>
-//               <label className="block text-sm font-medium text-gray-700 mb-1">Number of Days</label>
-//               <select
-//                 value={days}
-//                 onChange={(e) => setDays(Number(e.target.value))}
-//                 className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-//               >
-//                 <option value="1">1 Day</option>
-//                 <option value="2">2 Days</option>
-//                 <option value="3">3 Days</option>
-//                 <option value="4">4 Days</option>
-//                 <option value="5">5 Days</option>
-//               </select>
-//             </div>
-//           </div>
-
-//           <button
-//             onClick={handleGenerateItinerary}
-//             disabled={isLoading}
-//             className="w-full mt-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition disabled:bg-blue-300"
-//           >
-//             {isLoading ? "Generating Your Adventure..." : "Create My Itinerary"}
-//           </button>
-//         </div>
-
-
-//         {itinerary && (
-//   <div className="bg-white p-8 rounded-lg shadow-lg">
-//     <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-//       Your Itinerary for {destAutoRef.current?.getPlace()?.name}
-//     </h2>
-
-//     {itinerary.map((day, index) => (
-//       <div key={index} className="mb-8 border-b-2 border-gray-100 pb-8">
-//         {/* Day Header */}
-//         <div className="flex items-center justify-between mb-4">
-//           <h3 className="text-2xl font-semibold text-blue-700">Day {day.day_number}</h3>
-//           <p className="text-md text-gray-600 font-medium">
-//             <strong>Stay at:</strong> {day.stay_at}
-//           </p>
-//         </div>
-
-//         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-//           {/* Left Column: Visits */}
-//           <div className="prose max-w-none text-gray-700">
-//             {/* Morning Visits */}
-//             <div className="mb-6">
-//               <h4 className="text-lg font-bold text-gray-800 border-b pb-2 mb-3">Morning Plan</h4>
-//               {day.morning_visits.map((visit, vIndex) => (
-//                 <div key={vIndex} className="mb-3">
-//                   <p className="font-semibold text-blue-600">{visit.name}</p>
-//                   <p className="text-sm italic text-gray-600">{visit.description}</p>
-//                 </div>
-//               ))}
-//             </div>
-
-//             {/* Afternoon Visits */}
-//             <div>
-//               <h4 className="text-lg font-bold text-gray-800 border-b pb-2 mb-3">Afternoon Plan</h4>
-//               {day.afternoon_visits.map((visit, vIndex) => (
-//                 <div key={vIndex} className="mb-3">
-//                   <p className="font-semibold text-blue-600">{visit.name}</p>
-//                   <p className="text-sm italic text-gray-600">{visit.description}</p>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-
-//           {/* Right Column: Meals and Evening */}
-//           <div className="bg-gray-50 p-6 rounded-lg">
-//             <h4 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4">Meals & Evening</h4>
-            
-//             {/* Meal Suggestions */}
-//             <ul className="space-y-3 text-gray-700">
-//               <li>
-//                 <span className="font-semibold">Breakfast ({day.meals.breakfast.time}):</span> {day.meals.breakfast.name}
-//               </li>
-//               <li>
-//                 <span className="font-semibold">Lunch ({day.meals.lunch.time}):</span> {day.meals.lunch.name}
-//               </li>
-//               <li>
-//                 <span className="font-semibold">Dinner ({day.meals.dinner.time}):</span> {day.meals.dinner.name}
-//               </li>
-//             </ul>
-
-//             {/* Evening Activity */}
-//             <div className="mt-6 pt-4 border-t">
-//               <p className="font-semibold">Evening:</p>
-//               <p className="text-gray-700">{day.evening_activity}</p>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     ))}
-//   </div>
-// )}
-//         {itinerary && (
-//           <div className="bg-white p-8 rounded-lg shadow-lg">
-//             {/* ... (your existing itinerary display code is the same) ... */}
-//             <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Your Itinerary for {destAutoRef.current?.getPlace()?.name}</h2>
-//             {/* ... */}
-
-//             <button
-//                 onClick={handleSaveItinerary}
-//                 disabled={isSaving}
-//                 className="w-full mt-8 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition disabled:bg-green-300"
-//             >
-//                 {isSaving ? "Saving..." : "Save This Itinerary to My Trips"}
-//             </button>
-//           </div>
-//         )}
-
-
-        
-
-
-//       </div>
-//     </div>
-//   );
-// }
-
-
-// src/pages/ItineraryGenerator.js (or your temporary folder)
-
 import { useState, useRef } from "react";
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 import { useAuth } from "../context/authContext";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { FaMapMarkerAlt, FaCalendarAlt, FaBookOpen, FaPlaneDeparture } from "react-icons/fa"
+import { FaMapMarkerAlt, FaCalendarAlt, FaBookOpen, FaPlaneDeparture,FaCar} from "react-icons/fa"
 // Import your reusable components
 import ItineraryDisplay from "./ItineraryDisplay"; // Adjust path if needed
 import { Button } from '../components/ui/button'; // Adjust path if needed
@@ -278,6 +16,7 @@ const libraries=["places"];
 export default function ItineraryGenerator() {
   // --- UNIFIED STATE from both components ---
   const [days, setDays] = useState(3);
+  const [importType, setImportType] = useState('intermediate');
   const [itinerary, setItinerary] = useState(null);
   const [topPlaces, setTopPlaces] = useState([]);
   const [topHotels, setTopHotels] = useState([]);
@@ -345,7 +84,7 @@ export default function ItineraryGenerator() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${user.token}`, // Auth token is crucial
         },
-        body: JSON.stringify({ destination, days }),
+        body: JSON.stringify({ destination, days,importType }),
       }).then(res => {
         if (!res.ok) throw new Error("Failed to generate itinerary.");
         return res.json();
@@ -498,6 +237,24 @@ export default function ItineraryGenerator() {
                 </select>
                 </div>
             </div>
+
+             {/* Travel Style Input */}
+                <div className="space-y-2">
+                  <label className="font-medium text-gray-700 flex items-center gap-2">
+                      <FaCar className="text-orange-500" />
+                      Travel Style
+                  </label>
+                  <select
+                      value={importType}
+                      onChange={(e) => setImportType(e.target.value)}
+                      className="w-full p-3 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition"
+                  >
+                      <option value="cheap">Budget-Friendly</option>
+                      <option value="intermediate">Balanced</option>
+                      <option value="luxury">Luxury</option>
+                  </select>
+                </div>
+            
 
             {/* Action Buttons Section */}
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
