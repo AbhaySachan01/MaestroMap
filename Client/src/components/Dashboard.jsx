@@ -827,9 +827,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import toast from 'react-hot-toast';
-import { FaTrash, FaPlus, FaCalculator } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaCalculator, FaBalanceScale } from 'react-icons/fa';
 import { MapPin, Calendar, Clock } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from './ui/button'; 
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-full py-10">
@@ -848,6 +848,7 @@ export default function Dashboard({ onLogout }) {
   const [formData, setFormData] = useState({ origin: '', destination: '', startDate: '', endDate: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [summary, setSummary] = useState(null);
+
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -984,10 +985,30 @@ export default function Dashboard({ onLogout }) {
         {/* Welcome + Action Buttons */}
         <div className="text-center md:text-left space-y-4">
           <h2 className="text-3xl font-bold text-gray-900 mb-1">Welcome back, {user.name}! 🗺️</h2>
-          <p className="text-lg text-gray-600">Plan your next adventure.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button onClick={() => { setShowForm(true); setSummary(null); }} className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center">
-              <FaPlus /> Plan New Adventure
+          <p className="text-lg text-gray-600">Ready to plan your next adventure?</p>
+        </div>
+
+        {/* --- Action Buttons (UPDATED SECTION) --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          {/* Button 1: Generate Itinerary */}
+          <Link to="/generate" className="w-full">
+            <button className="w-full text-lg py-4 px-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-lg hover:shadow-xl hover:-translate-y-1 transform transition-all duration-300 flex items-center justify-center gap-3">
+              <FaPlus /> Generate Itinerary
+            </button>
+          </Link>
+          
+          {/* Button 2: Compare Places (NEW) */}
+          <Link to="/compare" className="w-full">
+            <button className="w-full text-lg py-4 px-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold rounded-lg hover:shadow-xl hover:-translate-y-1 transform transition-all duration-300 flex items-center justify-center gap-3">
+              <FaBalanceScale /> Compare Places
+            </button>
+          </Link>
+
+          {/* Button 3: Estimate Cost */}
+          <Link to="/cost" className="w-full sm:col-span-2 lg:col-span-1">
+            <button className="w-full text-lg py-4 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-lg hover:shadow-xl hover:-translate-y-1 transform transition-all duration-300 flex items-center justify-center gap-3">
+              <FaCalculator /> Estimate Route Cost
             </button>
             <Link to="/cost" className="w-full sm:w-auto">
               <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center">
@@ -1046,7 +1067,8 @@ export default function Dashboard({ onLogout }) {
           </div>
         )}
 
-        {/* Trips Section */}
+
+        {/* --- NEW Prettier Trips Section --- */}
         <div className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 shadow-2xl rounded-3xl p-8 md:p-10">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">

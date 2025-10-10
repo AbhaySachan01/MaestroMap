@@ -14,6 +14,7 @@ import { OpenTripPlaces } from "../agents/OpenTripPlaces.js";
 import { GooglePlaces } from "../agents/GooglePlaces.js";
 import { TripWeather } from "../controllers/Weather.js";
 import { EventsController } from "../controllers/Event.js";
+import { planTrip } from '../agents/comparision.js';
 const router = express.Router();
 
 router.post("/plan", orchestrateTrip);
@@ -26,7 +27,7 @@ router.post("/googleplaces",GooglePlaces);
 router.post("/city-code", fetchCityCode);
 router.post("/top-hotel-price-range", getTopHotelPriceRange);
 // router.post("/search", searchHotels);
-
+router.post('/plan-trip', planTrip);
 
 router.post("/test-flight", async (req, res) => {
   try {
