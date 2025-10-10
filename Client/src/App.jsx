@@ -16,11 +16,12 @@ import  { WeatherPage } from "./components/WeatherPage";
 import EventPage from "./components/EventPage";
 import TripDashboard from "./components/TripDashBoard";
 import PlacesHotelFood from "./temporary/PlacesHotelFood";
-import ItineraryGenerator from "./temporary/ItinerarayGenerator";
+import ItineraryGenerator from "./temporary/ItineraryGenerator";
 import MyTrips from "./temporary/MyTrips";
 import TripDetails from "./temporary/TripDetails";
 import AppLayout from './pages/AppLayout';
 import CostEstimator from './components/CostEstimator';
+import Comparison from './temporary/TripComparision';
 function AppRoutes() {
   const { user, logout } = useAuth();
 
@@ -38,6 +39,7 @@ function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route path="/placeshotels" element={<PlacesHotelFood />} />
         <Route path="/generate" element={<ItineraryGenerator />} />
+        <Route path="/compare" element={<Comparison />} />
         <Route path="/my-trips" element={<MyTrips />} />
         <Route path="/my-trips/:tripId" element={<TripDetails />} />
         <Route path="/findroutes" element={<RoutePlanner />} />

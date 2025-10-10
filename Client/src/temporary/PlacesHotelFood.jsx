@@ -8,6 +8,11 @@ const HOTELS_TYPES = ["hotel", "motel", "lodging"];
 const FOOD_TYPES = ["restaurant", "cafe", "bakery", "bar"];
 const libraries = ['places'];
 
+// 1. Define a Set of unwanted place types for efficient lookup.
+const UNWANTED_PLACE_TYPES = new Set(["school", "college", "university", "bank", "atm", "finance", "post_office"]);
+// New: Define a list of unwanted keywords to check against the place name.
+const UNWANTED_PLACE_KEYWORDS = ["school", "bank", "atm", "college", "university", "post office", "church", "mosque", "temple"];
+
 export default function GooglePlaces() {
   const [topPlaces, setTopPlaces] = useState([]);
   const [topHotels, setTopHotels] = useState([]);
@@ -36,7 +41,31 @@ export default function GooglePlaces() {
         body: JSON.stringify(bodyData),
       });
       const data = await res.json();
-      return Array.isArray(data) ? data.map(p => ({ ...p, location: { lat: Number(p.location.lat), lng: Number(p.location.lng) }})).filter(p => p.location && p.address && !isNaN(p.location.lat) && !isNaN(p.location.lng)).sort((a, b) => (b.reviews || 0) - (a.reviews || 0)) : [];
+      
+      return Array.isArray(data) 
+        ? data
+            .map(p => ({ ...p, location: { lat: Number(p.location.lat), lng: Number(p.location.lng) }}))
+            .filter(p => p.location && p.address && !isNaN(p.location.lat) && !isNaN(p.location.lng))
+            // 2. Updated filter logic to check both types and name.
+            .filter(p => {
+              // First, filter out by place type
+              const hasUnwantedType = p.types && p.types.some(type => UNWANTED_PLACE_TYPES.has(type));
+              if (hasUnwantedType) {
+                return false;
+              }
+              
+              // Second, filter out if the name contains unwanted keywords
+              const nameLower = p.name.toLowerCase();
+              const hasUnwantedKeyword = UNWANTED_PLACE_KEYWORDS.some(keyword => nameLower.includes(keyword));
+              if (hasUnwantedKeyword) {
+                return false;
+              }
+              
+              // If it passes both checks, keep it
+              return true;
+            })
+            .sort((a, b) => (b.reviews || 0) - (a.reviews || 0))
+        : [];
     } catch (err) {
       console.error("Fetch error:", err);
       return [];
