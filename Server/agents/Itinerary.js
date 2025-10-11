@@ -2,7 +2,7 @@ import axios from "axios";
 import { cheap } from "../prompts/cheap.js";
 import { intermediate } from "../prompts/intermediate.js";
 import { luxury } from "../prompts/luxury.js";
-
+import { sortPlaces } from "./GooglePlaces.js";
 // =================================================================================
 // CHANGE #1: Modify getPlaces to accept and use price level filters
 // =================================================================================
@@ -38,23 +38,6 @@ async function getPlaces({ lat, lng, radius, types, apiKey, minprice, maxprice }
   return allPlaces;
 }
 
-/**
- * 🔹 Sorts an array of places by rating or popularity. (NO CHANGES HERE)
- */
-function sortPlaces(places, sortType) {
-  // ... (this function is correct, no changes needed)
-  if (sortType === "popularity") {
-    return places.sort((a, b) => (b.user_ratings_total || 0) - (a.user_ratings_total || 0));
-  }
-  if (sortType === "rating") {
-    return places.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-  }
-  return places.sort((a, b) => {
-    const scoreA = (a.rating || 0) * Math.log((a.user_ratings_total || 0) + 1);
-    const scoreB = (b.rating || 0) * Math.log((b.user_ratings_total || 0) + 1);
-    return scoreB - scoreA;
-  });
-}
 
 
 // =================================================================================
