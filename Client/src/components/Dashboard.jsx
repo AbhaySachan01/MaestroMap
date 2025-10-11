@@ -827,7 +827,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import toast from 'react-hot-toast';
-import { FaTrash, FaPlus, FaCalculator } from 'react-icons/fa';
+import { FaTrash,FaMapMarkedAlt , FaPlus, FaCalculator } from 'react-icons/fa';
 import { MapPin, Calendar, Clock } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -986,15 +986,26 @@ export default function Dashboard({ onLogout }) {
           <h2 className="text-3xl font-bold text-gray-900 mb-1">Welcome back, {user.name}! 🗺️</h2>
           <p className="text-lg text-gray-600">Plan your next adventure.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button onClick={() => { setShowForm(true); setSummary(null); }} className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center">
-              <FaPlus /> Plan New Adventure
-            </button>
-            <Link to="/cost" className="w-full sm:w-auto">
-              <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center">
-                <FaCalculator /> Estimate Route Cost
-              </button>
-            </Link>
-          </div>
+        <button
+          onClick={() => { setShowForm(true); setSummary(null); }}
+          className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center"
+        >
+          <FaPlus /> Plan New Adventure
+        </button>
+
+        <button
+          onClick={() => navigate("/generate")}
+          className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center"
+        >
+          <FaMapMarkedAlt /> Generate New Itinerary
+        </button>
+
+        <Link to="/cost" className="w-full sm:w-auto">
+          <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center">
+            <FaCalculator /> Estimate Route Cost
+          </button>
+        </Link>
+        </div>
         </div>
 
         {/* New Adventure Form Modal */}
@@ -1086,10 +1097,10 @@ export default function Dashboard({ onLogout }) {
                         <Calendar className="w-4 h-4" />
                         <span>{new Date(trip.createdAt).toLocaleDateString()}</span>
                       </div>
-                      <div className="text-sm text-gray-700 mb-2">
+                      {/* <div className="text-sm text-gray-700 mb-2">
                         <p>Average Distance: {avgDistance} km</p>
                         <p>Average Duration: {avgDuration} hrs</p>
-                      </div>
+                      </div> */}
                       {routes.map((route, i) => (
                         <div key={i} className="text-sm text-gray-500">
                           Route {i+1}: {route.distance}, {route.duration}

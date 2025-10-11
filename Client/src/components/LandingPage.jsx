@@ -80,7 +80,7 @@ const LandingPage = ({ onLogin }) => {
 
           <div className="mb-12">
             <Button 
-              onClick={onLogin}
+              onClick={handleClick}
               className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold text-lg px-8 py-4 rounded-full transition-all duration-300 hover:shadow-xl hover:scale-105"
               data-testid="hero-get-started-btn"
             >
@@ -89,40 +89,74 @@ const LandingPage = ({ onLogin }) => {
             </Button>
           </div>
 
-          {/* Agent Cards */}
-          <div className="grid md:grid-cols-4 gap-6 mt-16">
-            <Link to="/weatherDetails"  className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="weather-agent-card">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i className="fas fa-cloud-sun text-white text-2xl"></i>
-              </div>
-              <h3 to="/weatherDetails" className="text-xl font-bold text-gray-900 mb-2">Sky Gazer</h3>
-              <p className="text-gray-600">Weather forecasts and climate insights for perfect timing</p>
-            </Link>
+{/* Agent Cards */}
+<div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+  {/* Weather Agent */}
+  <Link
+    to="/weatherDetails"
+    className="group bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-1"
+  >
+    <div className="w-16 h-16 bg-gradient-to-r from-sky-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+      <i className="fas fa-cloud-sun text-white text-2xl"></i>
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 text-center mb-2 group-hover:text-blue-700">
+      Sky Gazer
+    </h3>
+    <p className="text-gray-600 text-center">
+      Get real-time forecasts and weather insights for your trip
+    </p>
+  </Link>
 
-            <Link to="/findroutes" className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="maps-agent-card">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i className="fas fa-map-marked-alt text-white text-2xl"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Trailblazer</h3>
-              <p className="text-gray-600">Optimal routes and travel time calculations</p>
-            </Link>
+  {/* Route Finder */}
+  <Link
+    to="/findroutes"
+    className="group bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-1"
+  >
+    <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+      <i className="fas fa-route text-white text-2xl"></i>
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 text-center mb-2 group-hover:text-green-700">
+      Trailblazer
+    </h3>
+    <p className="text-gray-600 text-center">
+      Find optimal routes and travel durations easily
+    </p>
+  </Link>
 
-            <Link to="/eventDetails" className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="events-agent-card">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i className="fas fa-calendar-star text-white text-2xl"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Event Scout</h3>
-              <p className="text-gray-600">Local events and entertainment opportunities</p>
-            </Link>
+  {/* Event Finder */}
+  <Link
+    to="/eventDetails"
+    className="group bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-1"
+  >
+    <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-fuchsia-600 rounded-full flex items-center justify-center mx-auto mb-4">
+      <i className="fas fa-calendar-check text-white text-2xl"></i>
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 text-center mb-2 group-hover:text-purple-700">
+      Event Scout
+    </h3>
+    <p className="text-gray-600 text-center">
+      Discover top events and experiences nearby
+    </p>
+  </Link>
 
-            <Link to='/placeshotels' className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="budget-agent-card">
-              <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i className="fas fa-map-marked-alt text-white text-2xl"></i>
-              </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Destination Explorer</h3>
-                  <p className="text-gray-600">Find top-rated places and hotels for your trip</p>
-            </Link>
-          </div>
+  {/* Destination Explorer */}
+  <Link
+    to="/placeshotels"
+    className="group bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-1"
+  >
+    <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+      <i className="fas fa-hotel text-white text-2xl"></i>
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 text-center mb-2 group-hover:text-orange-700">
+      Destination Explorer
+    </h3>
+    <p className="text-gray-600 text-center">
+      Explore the best places and hotels for your journey
+    </p>
+  </Link>
+</div>
+
+
         </div>
       </section>
 
