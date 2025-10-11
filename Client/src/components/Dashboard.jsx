@@ -822,14 +822,13 @@
 //     </div>
 //   );
 // }
-
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import toast from 'react-hot-toast';
-import { FaTrash,FaMapMarkedAlt , FaPlus, FaCalculator, FaBalanceScale } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaCalculator, FaBalanceScale } from 'react-icons/fa';
 import { MapPin, Calendar, Clock } from 'lucide-react';
-import { Button } from './ui/button'; 
+import { Button } from './ui/button';
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-full py-10">
@@ -848,7 +847,6 @@ export default function Dashboard({ onLogout }) {
   const [formData, setFormData] = useState({ origin: '', destination: '', startDate: '', endDate: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [summary, setSummary] = useState(null);
-
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -870,7 +868,7 @@ export default function Dashboard({ onLogout }) {
   }, [user]);
 
   const computeAverages = (routes) => {
-    if (!routes || !routes.length) return { avgDistance: "N/A", avgDuration: "N/A" };
+    if (!routes?.length) return { avgDistance: "N/A", avgDuration: "N/A" };
     let totalDistance = 0, totalDuration = 0;
     routes.forEach(r => {
       const dist = parseFloat(r.distance.replace(" km", ""));
@@ -892,10 +890,7 @@ export default function Dashboard({ onLogout }) {
     });
     await toast.promise(deletePromise, {
       loading: 'Deleting trip...',
-      success: () => {
-        setTrips((cur) => cur.filter((t) => t._id !== tripId));
-        return 'Trip deleted successfully!';
-      },
+      success: () => { setTrips(cur => cur.filter(t => t._id !== tripId)); return 'Trip deleted successfully!'; },
       error: 'Failed to delete trip.',
     });
     setDeletingId(null);
@@ -908,9 +903,9 @@ export default function Dashboard({ onLogout }) {
         <p className="font-semibold text-center">Are you sure you want to delete this trip?</p>
         <div className="flex gap-4">
           <button onClick={() => { toast.dismiss(t.id); performDeletion(tripId); }}
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-semibold">Confirm</button>
+            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-semibold">Confirm</button>
           <button onClick={() => toast.dismiss(t.id)}
-                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
         </div>
       </div>
     ), { duration: 5000 });
@@ -950,9 +945,7 @@ export default function Dashboard({ onLogout }) {
         <h1 className="text-3xl font-bold text-gray-800 mb-4">Access Denied</h1>
         <p className="text-gray-600 mb-6">Please sign in to view your dashboard and saved trips.</p>
         <Link to="/signin">
-          <button className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300">
-            Go to Sign In
-          </button>
+          <button className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-lg">Go to Sign In</button>
         </Link>
       </div>
     </div>
@@ -982,43 +975,34 @@ export default function Dashboard({ onLogout }) {
       </header>
 
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-8">
-        {/* Welcome + Action Buttons */}
         <div className="text-center md:text-left space-y-4">
           <h2 className="text-3xl font-bold text-gray-900 mb-1">Welcome back, {user.name}! 🗺️</h2>
           <p className="text-lg text-gray-600">Ready to plan your next adventure?</p>
         </div>
 
-        {/* --- Action Buttons (UPDATED SECTION) --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          
-          {/* Button 1: Generate Itinerary */}
-          <Link to="/generate" className="w-full">
-            <button className="w-full text-lg py-4 px-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-lg hover:shadow-xl hover:-translate-y-1 transform transition-all duration-300 flex items-center justify-center gap-3">
+        {/* Action Buttons: Plan first, then Generate, Compare, Cost */}
+        <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-8">
+          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl hover:shadow-lg transition-all duration-300">
+            <FaPlus /> Plan New Adventure
+          </button>
+          <Link to="/generate">
+            <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl hover:shadow-lg transition-all duration-300">
               <FaPlus /> Generate Itinerary
             </button>
           </Link>
-          
-          {/* Button 2: Compare Places (NEW) */}
-          <Link to="/compare" className="w-full">
-            <button className="w-full text-lg py-4 px-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold rounded-lg hover:shadow-xl hover:-translate-y-1 transform transition-all duration-300 flex items-center justify-center gap-3">
+          <Link to="/compare">
+            <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold rounded-xl hover:shadow-lg transition-all duration-300">
               <FaBalanceScale /> Compare Places
             </button>
           </Link>
-
-          {/* Button 3: Estimate Cost */}
-          <Link to="/cost" className="w-full sm:col-span-2 lg:col-span-1">
-            <button className="w-full text-lg py-4 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-lg hover:shadow-xl hover:-translate-y-1 transform transition-all duration-300 flex items-center justify-center gap-3">
+          <Link to="/cost">
+            <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold rounded-xl hover:shadow-lg transition-all duration-300">
               <FaCalculator /> Estimate Route Cost
             </button>
-            <Link to="/cost" className="w-full sm:w-auto">
-              <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 justify-center">
-                <FaCalculator /> Estimate Route Cost
-              </button>
-            </Link>
-          </div>
+          </Link>
         </div>
 
-        {/* New Adventure Form Modal */}
+        {/* Plan Adventure Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-3xl p-8 md:p-10 w-full max-w-lg shadow-xl relative">
@@ -1035,40 +1019,26 @@ export default function Dashboard({ onLogout }) {
                   {isSubmitting ? "Planning..." : "Plan Adventure"}
                 </button>
               </form>
-
-              {/* Adventure Summary */}
               {summary && (
                 <div className="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-lg text-gray-800">
                   <h4 className="font-semibold mb-2">Adventure Summary:</h4>
                   <p>Estimated Cost: ₹{summary.estimatedCost}</p>
                   <p>Weather: {summary.agents.weather?.description || "not available"}</p>
-                  <p>
-                    Events: {
-                      summary.agents.events && summary.agents.events.length
-                        ? summary.agents.events.length <= 3
-                          ? summary.agents.events.map(ev => ev.name).join(", ")
-                          : summary.agents.events.slice(0, 3).map(ev => ev.name).join(", ")
-                        : "none found"
-                    }
-                  </p>
-                  {summary.agents.map && summary.agents.map.length > 0 && (() => {
-                    const { avgDistance, avgDuration } = computeAverages(summary.agents.map);
-                    return (
-                      <>
-                        <p>Routes: {summary.agents.map.length}</p>
-                        <p>Average Distance: {avgDistance} km</p>
-                        <p>Average Duration: {avgDuration} hrs</p>
-                      </>
-                    );
-                  })()}
+                  <p>Events: {summary.agents.events?.length ? summary.agents.events.slice(0, 3).map(ev => ev.name).join(", ") : "none found"}</p>
+                  {summary.agents.map?.length > 0 && (
+                    <>
+                      <p>Routes: {summary.agents.map.length}</p>
+                      <p>Average Distance: {computeAverages(summary.agents.map).avgDistance} km</p>
+                      <p>Average Duration: {computeAverages(summary.agents.map).avgDuration} hrs</p>
+                    </>
+                  )}
                 </div>
               )}
             </div>
           </div>
         )}
 
-
-        {/* --- NEW Prettier Trips Section --- */}
+        {/* Trips Section */}
         <div className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 shadow-2xl rounded-3xl p-8 md:p-10">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
@@ -1083,17 +1053,12 @@ export default function Dashboard({ onLogout }) {
           </div>
 
           {isLoading ? <LoadingSpinner /> : trips.length === 0 ? (
-            <div className="text-center py-16 px-4">
-              <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="text-center py-16 px-4 space-y-6">
+              <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
                 <MapPin className="w-12 h-12 text-orange-500" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">No Trips Found</h3>
-              <p className="text-gray-600 text-lg max-w-md mx-auto mb-6">
-                You haven't saved any itineraries yet. Start planning your dream adventure today!
-              </p>
-              <button onClick={() => setShowForm(true)} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
-                <FaPlus className="w-5 h-5" /> Plan New Adventure
-              </button>
+              <h3 className="text-2xl font-bold text-gray-800">No Trips Found</h3>
+              <p className="text-gray-600 text-lg max-w-md mx-auto">You haven't saved any itineraries yet.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1108,10 +1073,6 @@ export default function Dashboard({ onLogout }) {
                         <Calendar className="w-4 h-4" />
                         <span>{new Date(trip.createdAt).toLocaleDateString()}</span>
                       </div>
-                      {/* <div className="text-sm text-gray-700 mb-2">
-                        <p>Average Distance: {avgDistance} km</p>
-                        <p>Average Duration: {avgDuration} hrs</p>
-                      </div> */}
                       {routes.map((route, i) => (
                         <div key={i} className="text-sm text-gray-500">
                           Route {i+1}: {route.distance}, {route.duration}
