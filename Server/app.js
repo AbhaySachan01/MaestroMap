@@ -12,13 +12,13 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://maestromap.vercel.app"
+      "https://maestro-map.vercel.app", 
+      "https://maestromap.vercel.app"   
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"], // Explicitly added OPTIONS
     credentials: true
   })
 );
-
 
 app.options("*", cors());
 
